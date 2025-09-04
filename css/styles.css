@@ -5058,3 +5058,27 @@ html.no-csstransitions .s-hero__content {
   font-weight: 600;
   letter-spacing: .04em;
 }
+
+/* Works in WebKit browsers (Chrome, Edge, Safari, Opera) */
+::-webkit-scrollbar {
+  width: 8px;              /* adjust width if needed */
+}
+
+::-webkit-scrollbar-track {
+  background: #000;        /* track (background) */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000;        /* the draggable thumb */
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #111;        /* slightly lighter on hover so it's visible */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #000 #000; /* thumb color, track color */
+}
