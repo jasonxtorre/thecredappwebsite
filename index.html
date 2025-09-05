@@ -6,11 +6,7 @@
   <title>Cred — Launching Soon</title>
   <meta name="description" content="Cred measures the credibility of public voices. Pre-order early access." />
   <link rel="icon" type="image/png" href="images/favicon.png"/>
-
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet"/>
-
-  <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body>
@@ -26,14 +22,12 @@
         <span>Menu</span>
       </button>
 
-      <!-- LEFT NAV -->
       <nav id="site-nav" class="nav nav-left" aria-label="Primary">
         <a href="#top">Home</a>
         <a href="#contact" class="btn btn-ghost contact-link">Contact</a>
       </nav>
     </div>
 
-    <!-- FAR RIGHT CTA -->
     <div class="header-right">
       <a href="#" id="preorderNav" class="btn btn-accent btn-lg">Pre-Order Now</a>
     </div>
@@ -51,10 +45,9 @@
         </div>
       </div>
 
-      <!-- ===== HERO PHONE — video demo ===== -->
+      <!-- Video demo (never cropped) -->
       <div class="phone demo" aria-label="App demo">
         <div class="demo-stage" id="demoStage" aria-hidden="false">
-          <!-- IMPORTANT: provide MP4 (H.264) fallback for iOS + WebM for others -->
           <video
             id="demoVideo"
             class="demo-frame active"
@@ -66,13 +59,13 @@
             playsinline
             webkit-playsinline
           >
+            <!-- MP4 first (best iOS support), WebM as secondary -->
             <source src="images/demo-video1.mp4" type="video/mp4" />
             <source src="images/demo-video1.webm" type="video/webm" />
             Your browser does not support the video tag.
           </video>
         </div>
 
-        <!-- BOTTOM caption/help text -->
         <div class="demo-ui">
           <div class="demo-caption" id="demoCaption">Cred — quick tour</div>
         </div>
@@ -81,7 +74,7 @@
     <div class="scroll-hint">Scroll</div>
   </main>
 
-  <!-- ===== Content Section (optional sample) ===== -->
+  <!-- ===== Contact ===== -->
   <section class="section" id="contact">
     <div class="container center">
       <h2 class="h2">Stay in the loop</h2>
@@ -115,11 +108,11 @@
 
   <!-- ===== Scripts ===== -->
   <script>
-    // --- Year ---
+    // Year
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // --- Mobile menu toggle ---
+    // Mobile menu
     const menuBtn = document.querySelector('.menu-btn');
     const nav = document.getElementById('site-nav');
     menuBtn?.addEventListener('click', () => {
@@ -133,7 +126,7 @@
       }
     });
 
-    // --- Pre-order click-through (replace with checkout URL when ready) ---
+    // Preorder click
     const PREORDER_URL = '#';
     ['preorderCta','preorderNav']
       .map(id => document.getElementById(id)).filter(Boolean)
@@ -146,40 +139,38 @@
         }
       }));
 
-    // --- Video handling: play/pause based on visibility + mobile autoplay kick ---
+    // Video handling
     (function(){
       const phone = document.querySelector('.phone.demo');
       const video = document.getElementById('demoVideo');
       if (!video) return;
 
-      // Ensure correct flags for autoplay inline on iOS
+      // Ensure inline autoplay
       video.muted = true;
       video.setAttribute('playsinline', '');
       video.setAttribute('webkit-playsinline', '');
 
-      // Try to play on load
-      const tryPlay = () => video.play().catch(() => {});
-      document.addEventListener('DOMContentLoaded', tryPlay);
-      // Some mobile browsers need a user gesture once
+      const tryPlay = () => video.play().catch(()=>{});
+      if (document.readyState !== 'loading') tryPlay();
+      else document.addEventListener('DOMContentLoaded', tryPlay);
+
+      // Fallback gesture kick once
       const gestureKick = () => { tryPlay(); document.removeEventListener('touchstart', gestureKick); document.removeEventListener('click', gestureKick); };
       document.addEventListener('touchstart', gestureKick, { passive: true });
       document.addEventListener('click', gestureKick);
 
-      // Pause when offscreen for perf
+      // Pause when offscreen
       if ('IntersectionObserver' in window && phone) {
         const io = new IntersectionObserver(entries=>{
           entries.forEach(e=>{
-            if (e.isIntersecting) {
-              tryPlay();
-            } else {
-              video.pause();
-            }
+            if (e.isIntersecting) tryPlay();
+            else video.pause();
           });
         }, { threshold: 0.35 });
         io.observe(phone);
       }
 
-      // Also pause when tab hidden
+      // Pause on tab hide
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) video.pause(); else tryPlay();
       });
