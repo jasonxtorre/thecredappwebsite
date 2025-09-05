@@ -127,27 +127,37 @@
         <p class="preorder-sub">Want early access? Tell us where to reach you and we’ll follow up with next steps.</p>
       </header>
 
-      <form class="preorder-form" action="mailto:thecredapp@gmail.com" method="post" enctype="text/plain">
+      <form id="preorderForm" class="preorder-form" action="https://script.google.com/macros/s/AKfycbzb1WC-QM0fpQ_Ofgxv7j50tPZ-9CpkXMi4xbbQxRT3L4_0cSGWYQgbn_7w-bIL-L_nPA/exec" method="post" novalidate>
         <div class="preorder-grid">
           <div class="field">
             <label for="name">Your name</label>
-            <input id="name" name="name" type="text" placeholder="Jane Doe" required>
+            <input id="name" name="name" type="text" placeholder="Mario Chalmbers" required>
           </div>
           <div class="field">
             <label for="email">Your email</label>
-            <input id="email" name="email" type="email" placeholder="jane@company.com" required>
+            <input id="email" name="email" type="email" placeholder="jane@gmail.com" required>
           </div>
         </div>
 
         <div class="field">
-          <label for="message">Anything we should know?</label>
-          <textarea id="message" name="message" rows="4" placeholder="Company, use case, or timeline (optional)"></textarea>
+          <label for="usecase">Anything we should know?</label>
+          <textarea id="usecase" name="usecase" rows="4" placeholder="Usecase, questions, etc..."></textarea>
+        </div>
+
+        <!-- Honeypot (keep hidden) -->
+        <div style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;">
+          <label for="website">Leave this empty</label>
+          <input id="website" name="website" type="text" autocomplete="off">
         </div>
 
         <div class="actions">
           <button class="btn btn-primary btn-pill" type="submit">Send</button>
         </div>
+
+        <!-- Success/Fail message area -->
+        <p id="preorderMsg" class="form-msg" aria-live="polite" style="margin-top:12px;"></p>
       </form>
+
     </div>
   </section>
 
@@ -186,18 +196,15 @@
       }
     });
 
-    // Preorder click
-    const PREORDER_URL = '#';
+   // Preorder buttons → smooth scroll to form
     ['preorderCta','preorderNav']
       .map(id => document.getElementById(id)).filter(Boolean)
       .forEach(el => el.addEventListener('click', (e) => {
         e.preventDefault();
-        if (PREORDER_URL === '#') {
-          window.location.href = 'mailto:thecredapp@gmail.com?subject=Pre-Order%20Cred&body=Hi%20Cred%20team%2C%0A%0AI%27d%20like%20to%20pre-order%20early%20access.%20Please%20send%20details.%0A%0AThanks!';
-        } else {
-          window.location.href = PREORDER_URL;
-        }
+        const formSection = document.getElementById('contact');
+        formSection?.scrollIntoView({ behavior: 'smooth' });
       }));
+
 
     // Video handling
     (function(){
@@ -232,5 +239,41 @@
       });
     })();
   </script>
+  <script>
+  (function () {
+    const form = document.getElementById('preorderForm');
+    const msg  = document.getElementById('preorderMsg');
+    if (!form) return;
+
+    const endpoint = form.action;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.textContent = 'Sending…';
+
+      // Build URL-encoded body so Apps Script reads e.parameter
+      const fd = new FormData(form);
+      const body = new URLSearchParams(fd).toString();
+
+      try {
+        // Post as URL-encoded; use no-cors so it succeeds without CORS headers
+        await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+          body,
+          mode: 'no-cors',
+        });
+
+        // Optimistic UX (Apps Script wrote the row)
+        msg.textContent = 'Thanks! You will be emailed the next steps shortly!';
+        form.reset();
+      } catch (err) {
+        console.error(err);
+        msg.textContent = 'Hmm, something went wrong. Please try again or email thecredapp@gmail.com.';
+      }
+    });
+  })();
+</script>
+
 </body>
 </html>
