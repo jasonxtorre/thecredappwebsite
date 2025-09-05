@@ -24,6 +24,7 @@
 
       <nav id="site-nav" class="nav nav-left" aria-label="Primary">
         <a href="#top">Home</a>
+        <a href="#about">About</a>
         <a href="#contact" class="btn btn-ghost contact-link">Contact</a>
       </nav>
     </div>
@@ -45,7 +46,6 @@
         </div>
       </div>
 
-      <!-- Video demo (never cropped) -->
       <div class="phone demo" aria-label="App demo">
         <div class="demo-stage" id="demoStage" aria-hidden="false">
           <video
@@ -59,30 +59,93 @@
             playsinline
             webkit-playsinline
           >
-            <!-- MP4 first (best iOS support), WebM as secondary -->
             <source src="images/demo-video1.mp4" type="video/mp4" />
             <source src="images/demo-video1.webm" type="video/webm" />
             Your browser does not support the video tag.
           </video>
+        </div>
+        <div class="demo-ui">
+          <p class="demo-caption">Credibility at a glance • Source-backed • Neutral</p>
         </div>
       </div>
     </div>
     <div class="scroll-hint">Scroll</div>
   </main>
 
-  <!-- ===== Contact ===== -->
-  <section class="section" id="contact">
-    <div class="container center">
-      <h2 class="h2">Stay in the loop</h2>
-      <p class="lead">Want early access? Ping us and we’ll reach out with next steps.</p>
-      <form class="contact-form mt-32" action="mailto:thecredapp@gmail.com" method="post" enctype="text/plain">
-        <div class="form-row">
-          <input type="text" name="name" placeholder="Your name" aria-label="Your name" />
-          <input type="email" name="email" placeholder="Your email" aria-label="Your email" />
+  <!-- ===== About (revamped) ===== -->
+  <section class="section about" id="about" aria-labelledby="about-title">
+    <div class="about-bg" aria-hidden="true"></div>
+    <div class="about-container">
+      <div class="about-sticky">
+        <h2 id="about-title" class="about-title">About the Platform</h2>
+        <p class="about-lead">
+          Know who to trust online. Cred turns claims into clear, evidence-backed credibility scores.
+        </p>
+      </div>
+
+      <ul class="about-grid" role="list">
+        <li class="about-card">
+          <div class="badge" aria-hidden="true">1</div>
+          <div class="card-body">
+            <h3 class="card-title">Credibility Scores</h3>
+            <p class="card-text">At-a-glance ratings for public figures that summarize historical accuracy.</p>
+          </div>
+        </li>
+
+        <li class="about-card">
+          <div class="badge" aria-hidden="true">2</div>
+          <div class="card-body">
+            <h3 class="card-title">Source-Backed</h3>
+            <p class="card-text">Every claim links to reliable evidence. Tap through and audit the trail yourself.</p>
+          </div>
+        </li>
+
+        <li class="about-card">
+          <div class="badge" aria-hidden="true">3</div>
+          <div class="card-body">
+            <h3 class="card-title">Neutral & Transparent</h3>
+            <p class="card-text">No bias, no pay-to-play. Scoring logic is consistent and traceable.</p>
+          </div>
+        </li>
+
+        <li class="about-card">
+          <div class="badge" aria-hidden="true">4</div>
+          <div class="card-body">
+            <h3 class="card-title">Instant & Simple</h3>
+            <p class="card-text">Search anyone and view their track record in seconds—clean, fast, and clear.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== Pre-Order (clean, centered form) ===== -->
+  <section class="section preorder" id="contact" aria-labelledby="preorder-title">
+    <div class="preorder-wrap">
+      <header class="preorder-head">
+        <h2 id="preorder-title" class="preorder-title">Pre-Order Access</h2>
+        <p class="preorder-sub">Want early access? Tell us where to reach you and we’ll follow up with next steps.</p>
+      </header>
+
+      <form class="preorder-form" action="mailto:thecredapp@gmail.com" method="post" enctype="text/plain">
+        <div class="preorder-grid">
+          <div class="field">
+            <label for="name">Your name</label>
+            <input id="name" name="name" type="text" placeholder="Jane Doe" required>
+          </div>
+          <div class="field">
+            <label for="email">Your email</label>
+            <input id="email" name="email" type="email" placeholder="jane@company.com" required>
+          </div>
         </div>
-        <textarea name="message" rows="4" placeholder="Message" class="mt-16" aria-label="Message"></textarea>
-        <div class="mt-16">
-          <button class="btn btn-primary">Send</button>
+
+        <div class="field">
+          <label for="message">Anything we should know?</label>
+          <textarea id="message" name="message" rows="4" placeholder="Company, use case, or timeline (optional)"></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary btn-pill" type="submit">Send</button>
         </div>
       </form>
     </div>
@@ -97,6 +160,7 @@
       </div>
       <nav class="footer-nav" aria-label="Footer">
         <a href="#top">Home</a>
+        <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
     </div>
@@ -141,7 +205,6 @@
       const video = document.getElementById('demoVideo');
       if (!video) return;
 
-      // Ensure inline autoplay
       video.muted = true;
       video.setAttribute('playsinline', '');
       video.setAttribute('webkit-playsinline', '');
@@ -150,12 +213,10 @@
       if (document.readyState !== 'loading') tryPlay();
       else document.addEventListener('DOMContentLoaded', tryPlay);
 
-      // Fallback gesture kick once
       const gestureKick = () => { tryPlay(); document.removeEventListener('touchstart', gestureKick); document.removeEventListener('click', gestureKick); };
       document.addEventListener('touchstart', gestureKick, { passive: true });
       document.addEventListener('click', gestureKick);
 
-      // Pause when offscreen
       if ('IntersectionObserver' in window && phone) {
         const io = new IntersectionObserver(entries=>{
           entries.forEach(e=>{
@@ -166,7 +227,6 @@
         io.observe(phone);
       }
 
-      // Pause on tab hide
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) video.pause(); else tryPlay();
       });
