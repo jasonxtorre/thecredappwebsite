@@ -70,7 +70,7 @@ a:hover{color:#fff}
 
 /* Pre-order button: dark red + subtle white glow */
 .btn-accent{
-  background:#ff0000; /* deep dark red */
+  background:#8b0000; /* deep dark red */
   color:#fff;
   border:none;
   border-radius:999px;
