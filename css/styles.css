@@ -245,3 +245,44 @@ a:focus, button:focus{outline:2px solid #fff; outline-offset:3px}
 @media (max-height: 568px){
   :root{ --hero-vpad: 160px; }
 }
+
+
+/* ==== Pre-order button: comfortable but smaller on mobile ==== */
+@media (max-width: 480px){
+  .btn,
+  .btn-lg{ /* keep consistent button rhythm */
+    height: 44px;
+    padding: 0 16px;
+    font-size: 10.5px;
+    letter-spacing: .18em;
+  }
+
+  .btn-accent{
+    height: 44px;            /* was 50px */
+    padding: 0 16px;         /* was 26px */
+    font-size: 11px;         /* was 12px */
+    letter-spacing: .18em;   /* was .28em */
+    box-shadow: 0 0 6px rgba(255,255,255,.18);
+  }
+
+  /* tighten header layout so the CTA doesn’t feel oversized */
+  .header { height: 84px; }
+  .logo-img { height: 40px; }
+  .header-right { gap: 8px; }
+}
+
+/* extra-small phones */
+@media (max-width: 360px){
+  .btn,
+  .btn-lg{
+    height: 42px;
+    padding: 0 14px;
+    font-size: 10px;
+    letter-spacing: .16em;
+  }
+  .btn-accent{
+    height: 42px;
+    padding: 0 14px;
+    font-size: 10.5px;
+  }
+}
